@@ -1,2 +1,2 @@
 # Lilith
-Lego Minestorms
+Lego Mindstorms
