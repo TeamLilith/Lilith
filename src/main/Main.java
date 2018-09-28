@@ -1,54 +1,20 @@
 package main;
 
-
-import lejos.hardware.lcd.LCD;
-import lejos.hardware.motor.Motor;
-import lejos.utility.Delay;
+import lejos.hardware.port.SensorPort;
+import lejos.robotics.subsumption.Arbitrator;
+import lejos.robotics.subsumption.Behavior;
 
 public class Main {
-
 	public static void main(String[] args) {
-
-		// LCD.drawString("1", 1, 1);
-		 CompositeCommand p = new CompositeCommand();
-	     MoveForwardCommand mfc = new MoveForwardCommand(5);
-		 MoveBackwardCommand mbc = new MoveBackwardCommand(5);
-		 MoveLeftCommand mlc = new MoveLeftCommand(5);
-		 MoveRightCommand mrc = new MoveRightCommand(5);
-		 p.list.add(mfc);
-		 p.list.add(mbc);
-		 p.list.add(mlc);
-		 p.list.add(mrc);
-		 p.execute();
-		// WaitSeconds ws = new WaitSeconds(5);
-		// LCD.drawString("Objekte zur Liste hinzufügen", 2, 2);
-		// p.list.add(mfc); // Geradeaus fahren
-		// p.list.add(ws); // Warten
-		// p.list.add(mbc); // Rückwärts fahren
-		// LCD.drawString("Vor Execute", 3, 3 );
-		// p.execute();
-
-/*		Motor.A.setSpeed(720);// 2 RPM
-		Motor.B.setSpeed(720);
-		Motor.A.backward();
-		Motor.B.backward();
-		try {
-			Thread.sleep(5000);
-		} catch (Exception e) {
-		}
-
-		LCD.drawString("StartDelay", 1, 1);
-		Delay.msDelay(5000);
-		LCD.drawString("EndDelay", 1, 1);
-
-		Motor.A.setSpeed(720);// 2 RPM
-		Motor.B.setSpeed(720);
-		Motor.A.forward();
-		Motor.B.forward();
-		try {
-			Thread.sleep(5000);
-		} catch (Exception e) {
-		}
-*/
+		// creating new behaviors
+		Behavior b1 = new DriveForward();
+//		Behavior b2 = new HitWall(SensorPort.S2);
+		Behavior b3 = new FollowBlackLine(SensorPort.S3);
+		// b5, b3 -- Follow has a higher priority than searching for the line
+		Behavior b4 = new BatteryLow(6.5f);
+		// priority: low --> high
+		Behavior[] bArray = { b3 };
+		Arbitrator arby = new Arbitrator(bArray);
+		arby.go();
 	}
 }
