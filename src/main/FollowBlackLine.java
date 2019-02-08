@@ -25,7 +25,7 @@ public class FollowBlackLine implements Behavior {
 	public void suppress() {
 		suppressed = true;
 	}
-
+ 
 	public void action() {
 		suppressed = false;
 		int x = 0;
