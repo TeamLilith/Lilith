@@ -1,4 +1,4 @@
- package main;
+package main;
 
 import lejos.hardware.motor.Motor;
 import lejos.robotics.subsumption.Behavior;
@@ -16,12 +16,15 @@ public class DriveForward implements Behavior {
 
 	public void action() {
 		suppressed = false;
-		
+
+		Motor.C.setSpeed(540); // 210
 		Motor.C.forward();
+		Motor.D.setSpeed(540); // 210
 		Motor.D.forward();
-	
-		while (Motor.D.isMoving() && !suppressed)
+
+		while (Motor.D.isMoving() && !suppressed) {
 			Thread.yield();
+		}
 
 		Motor.C.stop();
 		Motor.D.stop();

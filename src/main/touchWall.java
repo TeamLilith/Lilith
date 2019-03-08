@@ -1,49 +1,42 @@
 package main;
+
 import lejos.hardware.motor.Motor;
 import lejos.hardware.port.Port;
 import lejos.hardware.sensor.EV3TouchSensor;
-import lejos.hardware.sensor.SensorMode;
 import lejos.robotics.SampleProvider;
 import lejos.robotics.subsumption.Behavior;
 
-	public class touchWall implements Behavior {
-		private boolean suppressed = false;
-		// private EV3TouchSensor touchSensor;
-		// private SensorMode touchSensorMode;
-		// private float[] sampleTouch;
-		private EV3TouchSensor touchSensor;
-		float[] FSampleTouch;
-		private SensorMode FTouchSensorMode; 
-		public touchWall(Port port) {
-			// touchSensor = new EV3TouchSensor(port);
-			touchSensor = new EV3TouchSensor(port);
-		}
+public class touchWall implements Behavior {
+	private boolean suppressed = false;
+	private EV3TouchSensor touchSensor;
+	private SampleProvider touchSensorProvider;
+	private float[] sampleTouch = { 0 };
 
-		public boolean takeControl() {
-			// sampleTouch = new float[touchSensorMode.sampleSize()];
-			// touchSensorMode = touchSensor.getTouchMode();
-			FSampleTouch = new float[FTouchSensorMode.sampleSize()];
-			FTouchSensorMode = touchSensor.getTouchMode();
-				if (FSampleTouch[0] == 1) {
-					return true;
-				}
-				return false;
-			
-		}
+	public touchWall(Port port) {
+		touchSensor = new EV3TouchSensor(port);
+	}
 
-		public void suppress() {
-			suppressed = true;
-		}
+	public boolean takeControl() {
+		touchSensorProvider = touchSensor.getTouchMode();
+		touchSensorProvider.fetchSample(sampleTouch, 0);
+		// System.out.println("IsPushed: " + sampleTouch[0]);
+		return sampleTouch[0] == 1;
+	}
 
-		public void action() {
-			suppressed = false;
-			Motor.C.rotate(180, true);
-			Motor.D.rotate(-360, true);
+	public void suppress() {
+		suppressed = true;
+	}
 
-			while (Motor.D.isMoving() && !suppressed)
-				Thread.yield();
+	public void action() {
+		suppressed = false;
+		// Rückwärts rausfahren
+		Motor.C.rotate(-90, true);
+		Motor.D.rotate(-90, true);
 
-			Motor.C.stop();
-			Motor.D.stop();
-		}
+		while (Motor.D.isMoving() && !suppressed)
+			Thread.yield();
+
+		Motor.C.stop();
+		Motor.D.stop();
+	}
 }

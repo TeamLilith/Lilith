@@ -28,7 +28,7 @@ public class Home implements Behavior {
 
 		colorSensorProvider = colorSensor.getRedMode();
 		colorSensorProvider.fetchSample(sampleColor, 0);
-		System.out.println(sampleColor[0]);
+		// System.out.println(sampleColor[0]);
 
 		if (homeColor == 0)
 			homeColor = sampleColor[0];
@@ -61,33 +61,16 @@ public class Home implements Behavior {
 
 			firstTime = false;
 		} else {
-			// Dosen in Base
-			// Motor.C.rotate(-360, true);
-			// Motor.D.rotate(-360, true);
-			// while (Motor.D.isMoving() && !suppressed)
-			// Thread.yield();
-			//
-			// Motor.C.stop();
-			// Motor.D.stop();
 
 			// Rückwärts rausfahren
-			Motor.C.rotate(-180, true);
-			Motor.D.rotate(-180, true);
+			Motor.C.rotate(-360, true);
+			Motor.D.rotate(-360, true);
 
-			// // Drehen
-			// while (Motor.D.isMoving() && !suppressed)
-			// Thread.yield();
-			//
-			// Motor.C.stop();
-			// Motor.D.stop();
-			//
-			// Motor.C.rotate(720, true);
-			// Motor.D.rotate(-720, true);
-			// while (Motor.D.isMoving() && !suppressed)
-			// Thread.yield();
-			//
-			// Motor.C.stop();
-			// Motor.D.stop();
+			while (Motor.D.isMoving() && !suppressed)
+				Thread.yield();
+
+			Motor.C.rotate(180, true);
+			Motor.D.rotate(-180, true);
 
 			while (Motor.D.isMoving() && !suppressed)
 				Thread.yield();
@@ -95,12 +78,13 @@ public class Home implements Behavior {
 			Motor.C.stop();
 			Motor.D.stop();
 
+			// while (Motor.D.isMoving() && !suppressed)
+			// Thread.yield();
+			//
+			// Motor.C.stop();
+			// Motor.D.stop();
+
 		}
 
 	}
-	/*
-	 * public float getHomeColor() { return HomeColor; }
-	 * 
-	 * public void setHomeColor(float homeColor) { HomeColor = homeColor; }
-	 */
 }
